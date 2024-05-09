@@ -36,30 +36,32 @@ steps:
   displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
-    projects: '**/*.csproj'
+    projects: '/*.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - $(buildConfiguration)'
   inputs:
     command: 'build'
     arguments: '--no-restore --configuration $(buildConfiguration)'
-    projects: '**/*.csproj'
+    projects: '/*.csproj'
+
 - task: DotNetCoreCLI@2
-  displayName:  'Run unit test - $(buildConfiguration)'
+  displayName: 'Run unit tests - $(buildConfiguration)'
   inputs:
     command: 'test'
     arguments: '--no-build --configuration $(buildConfiguration)'
-    publishTestResults: true
-    projects: '**/*.Test.csproj'
+    publishTestResults: True
+    projects: '/*.Tests.csproj'
+
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
     command: 'publish'
-    projects: '**/*.csproj'
+    projects: '/*.csproj'
     publishWebProjects: false
     arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
-  condition: succeeded()
+  condition: succeeded()
